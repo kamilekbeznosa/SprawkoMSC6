@@ -1,0 +1,203 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{karnaugh-map}
+\usepackage[polish]{babel}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{url}
+\usepackage{array}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{center}
+	% Używamy @{} aby usunąć zewnętrzne marginesy
+	% Używamy 'm' (z pakietu 'array') dla środkowania w pionie
+	
+	\begin{tabular}{@{}|m{0.65\textwidth}|m{0.3\textwidth}|@{}}
+		\hline
+		% --- PIERWSZY WIERSZ LOGICZNY (wg obrazka) ---
+		% Komórka 1,1 (Lewa-góra)
+		Wydział Informatyki Politechniki Białostockiej \newline
+		Przedmiot: Modułowe systemy cyfrowe
+		&
+		% Komórka 1,2 (Prawa-góra)
+		Data: 10.12.2025 \\ \hline
+		
+		% --- DRUGI WIERSZ LOGICZNY (wg obrazka) ---
+		% Komórka 2,1 (Lewa-środek)
+		Zajęcia nr 6 \newline
+		Temat: Bloki sekwencyjne-liczniki \newline
+		
+		& % <-- Separator kolumn dla wiersza 2
+		
+		% Komórka 2,2 (Prawa-środek)
+		
+		\\
+		
+		% --- TRZECI WIERSZ LOGICZNY (wg obrazka) ---
+		% Komórka 3,1 (Lewa-dół)
+		Grupa: Lab 8 \newline
+		Imię i nazwisko: \newline
+		Kamil Kubajewski, Jakub Matusiewicz, Bartosz Orłowski
+		
+		& % <-- Separator kolumn dla wiersza 3
+		
+		% Komórka 3,2 (Prawa-dół)
+		Prowadzący: \newline
+		dr hab. inż. Sławomir Zieliński \\ \hline
+	\end{tabular}
+\end{center}
+
+\section{Cel ćwiczeń}
+Zapoznanie z sekwencyjnymi układami cyfrowymi.
+\section{Podstawa teoretyczna}
+
+
+\section{Przebieg ćwiczeń}
+\subsection{Zadanie 1}
+Zaprojektuj i zrealizuj dwójkę liczącą na przerzutniku typu D i JK wykorzystując moduł
+laboratoryjny DB11. Zaobserwuj sygnały wyjściowe obu przerzutników.
+
+\subsubsection{Realizacja na przerzutniku typu D}
+Przerzutnik typu D przepisuje stan wejścia $D$ na wyjście $Q$ po wystąpieniu aktywnego zbocza zegara. Aby układ działał jako dwójka licząca, należy na wejście podać stan przeciwny do aktualnego. Równanie charakterystyczne licznika MOD 2 dla przerzutnika D przyjmuje postać:
+\begin{equation}
+    D = \overline{Q_n}
+\end{equation}
+
+Poniższa tabela przedstawia zmianę stanu licznika ($Q_n \rightarrow Q_{n+1}$) oraz wymagany stan wejścia $D$.
+
+\begin{table}[h!]
+    \centering
+    \caption{Tabela przejść i wzbudzeń przerzutnika D}
+    \begin{tabular}{|c|c|c|l|}
+    \hline
+    \textbf{Stan obecny ($Q_n$)} & \textbf{Stan następny ($Q_{n+1}$)} & \textbf{Wymagane $D$} & \textbf{Opis} \\ \hline
+    0 & 1 & 1 & Zmiana $0 \rightarrow 1$ (bo $D = \overline{Q}$) \\ \hline
+    1 & 0 & 0 & Zmiana $1 \rightarrow 0$ (bo $D = \overline{Q}$) \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Realizacja na przerzutniku typu JK}
+Przerzutnik JK jest przerzutnikiem uniwersalnym. Jego działanie zależy od konfiguracji wejść $J$ i $K$. Aby uzyskać zmianę stanu na przeciwny przy każdym takcie zegara (tryb \textbf{Toggle}), czyli $Q_{n+1} = \overline{Q_n}$, należy ustawić oba wejścia w stan wysoki:
+\begin{equation}
+    J = 1, \quad K = 1
+\end{equation}
+
+Tabela przedstawia wymagane stany na wejściach $J$ i $K$, aby uzyskać zmianę stanu wyjścia.
+
+\begin{table}[h!]
+    \centering
+    \caption{Tabela przejść i wzbudzeń przerzutnika JK}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Stan ($Q_n$)} & \textbf{Stan nast. ($Q_{n+1}$)} & \textbf{Wymagane $J$} & \textbf{Wymagane $K$} & \textbf{Tryb} \\ \hline
+    0 & 1 & 1 & X & Toggle \\ \hline
+    1 & 0 & X & 1 & Toggle \\ \hline
+    \end{tabular}
+    \vspace{0.5em} \\
+    \textit{(Gdzie X oznacza stan dowolny. Dla uproszczenia konstrukcji przyjęto $J=1$ i $K=1$ dla obu przypadków).}
+\end{table}
+
+\subsubsection{Zrealizowany układ}
+Na podstawie powyższych analiz teoretycznych zaprojektowano i zmontowano układ. Schemat połączeń oraz wynik weryfikacji przedstawiono na poniższym rysunku.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{obwod1.PNG}
+    \caption{Zrealizowany licznik modulo 2 na przerzutnikach}
+    \label{fig:obwod1}
+\end{figure}
+
+\subsection{Zadanie 2}
+Zaprojektować i wykonać 4-bitowy licznik liczący w górę i w dół (ang. Ripple counter)
+wykorzystując moduł laboratoryjny DB14.
+
+
+\subsubsection{Projekt połączeń – Licznik w górę (UP)}
+W celu realizacji zliczania narastającego (0, 1, 2...), zaprojektowano układ, w którym wyjście proste $Q$ poprzedniego przerzutnika steruje wejściem zegarowym $C_P$ następnego przerzutnika.
+
+Zrealizowane połączenia:
+\begin{enumerate}
+    \item Źródło zegara $\rightarrow$ wejście $C_P$ bitu $Q_0$.
+    \item Wyjście $Q_0$ $\rightarrow$ wejście $C_P$ bitu $Q_1$.
+    \item Wyjście $Q_1$ $\rightarrow$ wejście $C_P$ bitu $Q_2$.
+    \item Wyjście $Q_2$ $\rightarrow$ wejście $C_P$ bitu $Q_3$.
+\end{enumerate}
+
+Uzyskane stany wyjść przedstawiono w tabeli poniżej.
+
+\begin{table}[h!]
+    \centering
+    \caption{Zarejestrowana sekwencja liczenia w górę}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{Takt} & \textbf{$Q_3$} & \textbf{$Q_2$} & \textbf{$Q_1$} & \textbf{$Q_0$} & \textbf{Stan (DEC)} \\ \hline
+    0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+    1 & 0 & 0 & 0 & 1 & 1 \\ \hline
+    2 & 0 & 0 & 1 & 0 & 2 \\ \hline
+    ... & ... & ... & ... & ... & ... \\ \hline
+    15 & 1 & 1 & 1 & 1 & 15 \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Projekt połączeń – Licznik w dół (DOWN)}
+W celu realizacji zliczania malejącego (15, 14, 13...), zmodyfikowano projekt, wykorzystując wyjścia zanegowane $\overline{Q}$ do sterowania kolejnymi stopniami licznika.
+
+Zrealizowane połączenia:
+\begin{enumerate}
+    \item Źródło zegara $\rightarrow$ wejście $C_P$ bitu $Q_0$ (bez zmian).
+    \item Wyjście $\overline{Q_0}$ $\rightarrow$ wejście $C_P$ bitu $Q_1$.
+    \item Wyjście $\overline{Q_1}$ $\rightarrow$ wejście $C_P$ bitu $Q_2$.
+    \item Wyjście $\overline{Q_2}$ $\rightarrow$ wejście $C_P$ bitu $Q_3$.
+\end{enumerate}
+
+\subsubsection{Realizacja w środowisku symulacyjnym}
+Układ został zaprojektowany i uruchomiony w programie Multisim. Poprawność połączeń zweryfikowano poprzez obserwację stanów na wyświetlaczu szesnastkowym oraz diodach próbników logicznych.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{obwod2.PNG}
+    \caption{Realizacja 4-bitowego licznika w Multisim}
+    \label{fig:licznik_ripple}
+\end{figure}
+
+\subsection{Zadanie 3}
+Przebadać działanie 8-bitowego licznika cyklicznego (ang. Ring Counter) wykorzystując
+moduł laboratoryjny DB37.
+
+Weryfikacja działania układu polegała na ręcznym sterowaniu sygnałem zegarowym za pomocą przycisku \textbf{S3}. Obserwacja diod LED (\textbf{L1}--\textbf{L8}) pozwoliła potwierdzić poprawność logiczną układu: każde wciśnięcie przycisku powodowało cykliczne przemieszczanie się stanu aktywnego (zapalona dioda) na kolejną pozycję. Po osiągnięciu ostatniego bitu, cykl rozpoczynał się od nowa.
+
+Dodatkowo przetestowano funkcję resetowania za pomocą przycisku \textbf{S1}, którego wciśnięcie powodowało natychmiastowe wyzerowanie licznika (zgaszenie wszystkich diod).
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{obwod3.PNG}
+    \caption{Realizacja 8-bitowego licznika cyklicznego}
+    \label{fig:licznik_ripple}
+\end{figure}
+\section{Wnioski}
+
+
+\section{Literatura}
+\renewcommand{\refname}{}
+\begin{thebibliography}{9}
+
+\end{thebibliography}
+
+\section{Protokół}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{protokol.PNG}
+    \caption{Protokół}
+    \label{fig:moj_obrazek}
+\end{figure}
+
+
+\end{document}
