@@ -59,6 +59,33 @@
 \section{Cel ćwiczeń}
 Zapoznanie z sekwencyjnymi układami cyfrowymi.
 \section{Podstawa teoretyczna}
+Liczniki to sekwencyjne układy cyfrowe, których głównym zadaniem jest zliczanie impulsów wejściowych oraz przechowywanie wyniku w postaci binarnej. Podstawowym parametrem licznika jest jego pojemność. Licznik o pojemności $P$ nazywany jest licznikiem modulo $P$. Pojemność licznika jest zależna od liczby przerzutników, z których składa się licznik. Liczba przerzutników $n$ potrzebna do zbudowania licznika o pojemności $P$ musi spełniać warunek:
+\begin{equation}
+ P \le 2^n
+\end{equation}
+
+\subsection{Dwójka licząca}
+Podstawowym elementem budulcowym liczników jest tzw. „dwójka licząca”, czyli licznik modulo 2. Układ ten zmienia swój stan na przeciwny po każdym aktywnym zboczu sygnału zegarowego.
+
+\begin{itemize}
+    \item \textbf{Realizacja na przerzutniku JK:} Polega na podaniu stanu wysokiego („1”) na oba wejścia sterujące ($J$ oraz $K$). Przerzutnik pracuje wówczas w trybie przełączania.
+    \item \textbf{Realizacja na przerzutniku D:} Polega na wprowadzeniu pętli sprzężenia zwrotnego – wyjście $\overline{Q}$ (zanegowane) łączy się z wejściem $D$.
+\end{itemize}
+Dwójka licząca pełni również funkcję dzielnika częstotliwości przez 2, co jest fundamentem budowy liczników wielobitowych.
+
+\subsection{Liczniki asynchroniczne}
+W licznikach asynchronicznych szeregowych sygnał zegarowy doprowadzany jest tylko do wejścia pierwszego przerzutnika. Każdy kolejny przerzutnik jest taktowany sygnałem wyjściowym z poprzedniego bloku.
+
+\subsection{Liczniki rewersyjne}
+Liczniki mogą pracować w jednym z dwóch trybów zliczania:
+\begin{itemize}
+    \item \textbf{W górę:} Zwiększają zawartość o 1. W liczniku asynchronicznym zbudowanym na przerzutnikach reagujących na opadające zbocze, wyjście proste $Q$ poprzedniego stopnia steruje wejściem zegarowym następnego.
+    \item \textbf{W dół:} Zmniejszają zawartość o 1. Uzyskuje się to poprzez sterowanie kolejnych bloków z wyjść $\overline{Q}$ poprzedników.
+\end{itemize}
+Licznik rewersyjny łączy te dwie funkcjonalności, umożliwiając zmianę kierunku zliczania za pomocą dodatkowego sygnału sterującego, który decyduje, czy sygnał zegarowy dla następnego przerzutnika pobierany jest z wyjścia $Q$ czy $\overline{Q}$.
+
+\subsection{Liczniki pierścieniowe}
+Licznik pierścieniowy jest to sekwencyjny układ cyfrowy pracujący w kodzie „1 z n”. Podczas prawidłowego cyklu działania tylko jeden z bitów może mieć wartość „1”. Liczba stanów cyklu jest równa liczbie przerzutników tworzących układ.
 
 Liczniki to sekwencyjne układy cyfrowe, których głównym zadaniem jest zliczanie impulsów wejściowych oraz przechowywanie wyniku w postaci binarnej. Podstawowym parametrem licznika jest jego pojemność. Licznik o pojemności $P$ nazywany jest licznikiem modulo $P$. Pojemność licznika jest zależna od liczby przerzutników, z których składa się licznik. Liczba przerzutników $n$ potrzebna do zbudowania licznika o pojemności $P$ musi spełniać warunek:
 \begin{equation}
